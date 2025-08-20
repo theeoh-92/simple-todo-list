@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Simple Todo List</title>
+    <!-- pico css -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.classless.blue.min.css"
+    />
+    <!-- custom css -->
+    <link rel="stylesheet" href="./assets/css/styles.css" />
+  </head>
+  <body>
+    <header>
+      <h1>📋 Simple Todo List</h1>
+    </header>
+
+    <main>
+      <section class="task-list">
+        <header class="task-list__header">
+          <h2 class="tl__header-title">💤 Incomplete Tasks</h2>
+          <!-- TODO: hook up counter with JS -->
+          <span id="incomplete-tasks-count" class="badge">0</span>
+        </header>
+
+        <!-- <ul class="task-list__body"></ul> -->
+
+        <p class="task-list__empty">
+          <em>Nothing here... why not add a task?</em>
+        </p>
+      </section>
+
+      <section class="task-list">
+        <header class="task-list__header">
+          <h2 class="tl__header-title">🔥 Completed Tasks</h2>
+          <!-- TODO: hook up counter with JS -->
+          <span id="complete-tasks-count" class="badge">0</span>
+        </header>
+
+        <!-- <ul class="task-list__body"></ul> -->
+
+        <p class="task-list__empty">
+          <em>No wins yet — finish a task to celebrate here!</em>
+        </p>
+      </section>
+    </main>
+
+    <footer>
+      <p>Simple Todo List © 2025</p>
+      <small>Built by Theo Snyman</small>
+    </footer>
+  </body>
+</html>

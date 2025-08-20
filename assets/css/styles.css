@@ -1,0 +1,51 @@
+body,
+main {
+  display: flex;
+  flex-direction: column;
+}
+
+body {
+  min-height: 100dvh;
+}
+
+main,
+.task-list {
+  flex: 1;
+}
+
+footer {
+  text-align: center;
+}
+
+footer > p {
+  margin-bottom: 0.25rem;
+}
+
+/** task list */
+.task-list__header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.tl__header-title {
+  margin-bottom: 0;
+}
+
+.task-list__empty {
+  text-align: center;
+}
+
+/** badge component */
+
+.badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgb(32, 96, 223);
+  color: white;
+  padding: 0.125rem 0.625rem;
+  border-radius: 100%;
+  font-weight: 700;
+}
