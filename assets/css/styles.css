@@ -6,15 +6,12 @@ main {
 
 body {
   min-height: 100dvh;
+  position: relative;
 }
 
 main,
 .task-list {
   flex: 1;
-}
-
-footer {
-  text-align: center;
 }
 
 footer > p {
@@ -37,15 +34,32 @@ footer > p {
   text-align: center;
 }
 
-/** badge component */
+/** general component styling */
 
-.badge {
+.badge,
+#task-creator__open {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+/** badge component */
+
+.badge {
   background: rgb(32, 96, 223);
   color: white;
   padding: 0.125rem 0.625rem;
   border-radius: 100%;
   font-weight: 700;
+}
+
+/** task creator component */
+
+#task-creator__open {
+  position: absolute;
+  bottom: 1rem;
+  right: 1rem;
+  border-radius: 100%;
+  padding: 1rem;
+  font-size: 1.25rem;
 }

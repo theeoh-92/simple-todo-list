@@ -23,8 +23,7 @@
       <section class="task-list">
         <header class="task-list__header">
           <h2 class="tl__header-title">💤 Incomplete Tasks</h2>
-          <!-- TODO: hook up counter with JS -->
-          <span id="incomplete-tasks-count" class="badge">0</span>
+          <span id="incomplete-tasks-count" class="badge"></span>
         </header>
 
         <!-- <ul class="task-list__body"></ul> -->
@@ -37,8 +36,7 @@
       <section class="task-list">
         <header class="task-list__header">
           <h2 class="tl__header-title">🔥 Completed Tasks</h2>
-          <!-- TODO: hook up counter with JS -->
-          <span id="complete-tasks-count" class="badge">0</span>
+          <span id="complete-tasks-count" class="badge"></span>
         </header>
 
         <!-- <ul class="task-list__body"></ul> -->
@@ -53,5 +51,82 @@
       <p>Simple Todo List © 2025</p>
       <small>Built by Theo Snyman</small>
     </footer>
+
+    <button id="task-creator__open" data-role="open-task-creator">
+      <ion-icon name="add-outline" data-role="open-task-creator"></ion-icon>
+    </button>
+
+    <!-- task creator modal -->
+    <dialog class="modal" id="task-creator">
+      <article>
+        <header>
+          <button
+            aria-label="Close"
+            rel="prev"
+            data-role="close-task-creator"
+          ></button>
+          <p>
+            <strong>🎯 Task Creator</strong>
+          </p>
+        </header>
+
+        <form>
+          <!-- task description -->
+          <label for="task-description">Description</label>
+          <input
+            type="text"
+            name="task-description"
+            id="task-description"
+            autocomplete="off"
+            aria-describedby="task-description-helper"
+          />
+          <small id="task-description-helper">Please describe your task.</small>
+          <!-- metadata -->
+          <fieldset class="task-metadata">
+            <!-- task category -->
+            <div>
+              <select
+                name="task-category-select"
+                id="task-category-select"
+                aria-label="Categorize your task..."
+              >
+                <option selected disabled value="">
+                  Categorize your task...
+                </option>
+                <option value="Work">Work</option>
+                <option value="Personal">Personal</option>
+                <option value="Health">Health</option>
+                <option value="Home">Home</option>
+                <option value="Learning">Learning</option>
+              </select>
+            </div>
+            <!-- task due date -->
+            <div>
+              <label for="task-due-date">Due Date</label>
+              <input
+                type="date"
+                name="task-due-date"
+                id="task-due-date"
+                aria-label="Date"
+              />
+            </div>
+          </fieldset>
+        </form>
+
+        <footer>
+          <button data-role="create-task">Create Task</button>
+        </footer>
+      </article>
+    </dialog>
+
+    <!-- ionicons -->
+    <script
+      type="module"
+      src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"
+    ></script>
+    <script
+      nomodule
+      src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"
+    ></script>
   </body>
 </html>
