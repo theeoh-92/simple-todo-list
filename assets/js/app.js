@@ -1,89 +1,133 @@
 const tasks = {
   incomplete: [],
-  complete: [],
-  totalIncompleteTasks: 0,
-  totalCompleteTasks: 0,
+  incompleteCount: 0,
 };
 
 const body = document.querySelector("body");
-const incompleteTasksCount = document.querySelector("#incomplete-tasks-count");
-const completeTasksCount = document.querySelector("#complete-tasks-count");
-const taskCreator = document.querySelector("#task-creator");
-const taskDescriptionInput = document.querySelector("#task-description");
-const taskCategorySelect = document.querySelector("#task-category-select");
-const taskDueDatePicker = document.querySelector("#task-due-date");
+const incompleteCount = document.getElementById("incomplete-count");
+const incompleteEmptyMessage = document.getElementById("incomplete-empty");
+const incompleteTasksList = document.getElementById("incomplete-tasks");
+const taskCreator = document.getElementById("task-creator");
+const taskDescription = document.getElementById("task-description");
+const taskCategory = document.getElementById("task-category");
+const taskDueDate = document.getElementById("task-due-date");
 
 body.addEventListener("click", (clickEvent) => {
-  if (clickEvent.target.dataset.role === undefined) return;
-
   switch (clickEvent.target.dataset.role) {
     case "open-task-creator":
-      console.log("open task creator button clicked");
       openTaskCreator();
       break;
     case "close-task-creator":
-      console.log("close task creator button clicked");
       closeTaskCreator();
       break;
     case "create-task":
-      console.log("create task button clicked");
       if (validateTask()) {
         createTask();
       }
-      break;
-    default:
-      break;
   }
 });
 
 function populateTaskCounters() {
-  console.log("populating task counters");
-  incompleteTasksCount.textContent = tasks.totalIncompleteTasks;
-  completeTasksCount.textContent = tasks.totalCompleteTasks;
+  console.log(
+    `populating task counters | incomplete: ${tasks.incompleteCount}`
+  );
+  incompleteCount.textContent = tasks.incompleteCount;
 }
+
 function openTaskCreator() {
+  console.log("opening task creator");
   taskCreator.setAttribute("open", "");
 }
 function closeTaskCreator() {
+  console.log("closing task creator and clearing inputs");
+  taskDescription.removeAttribute("aria-invalid");
+  taskDescription.value = "";
+  taskCategory.value = "";
+  taskDueDate.value = "";
   taskCreator.removeAttribute("open");
 }
-function validateTask() {
-  let valid = true;
 
-  const description = taskDescriptionInput.value.trim();
-  if (!description) {
-    console.log("task invalid");
-    valid = false;
-    taskDescriptionInput.setAttribute("aria-invalid", "true");
-    return valid;
+// validation helper function
+function isDescriptionValid(description) {
+  const trimmedDescription = description.trim();
+  return trimmedDescription.length > 0;
+}
+// real time validation
+taskDescription.addEventListener("input", () => {
+  const isValid = isDescriptionValid(taskDescription.value);
+  taskDescription.setAttribute("aria-invalid", (!isValid).toString());
+});
+// submit time validation
+function validateTask() {
+  const validTask = true;
+
+  console.log("validating task details");
+
+  if (!isDescriptionValid(taskDescription.value)) {
+    console.error("task description is missing");
+    taskDescription.setAttribute("aria-invalid", "true");
+    return !validTask;
   }
 
-  console.log("task valid");
-  taskDescriptionInput.removeAttribute("aria-invalid");
-  return valid;
+  return validTask;
 }
+
 function createTask() {
-  const description = taskDescriptionInput.value.trim();
-  const category = taskCategorySelect.value;
-  const dueDate = taskDueDatePicker.value;
+  console.log("creating task");
 
-  tasks.incomplete.push({
-    description,
-    category,
-    dueDate,
+  const newTask = {
+    description: taskDescription.value,
+    category: taskCategory.value,
+    dueDate: taskDueDate.value,
     finished: false,
-    createdOn: new Date().toISOString(),
-    finishedOn: null,
-  });
-  tasks.totalIncompleteTasks++;
+    createdOn: new Date(),
+    deletedOn: null,
+  };
 
-  updateUI();
+  tasks.incomplete.push(newTask);
+  tasks.incompleteCount++;
+
+  renderUI();
   closeTaskCreator();
 }
-function updateUI() {
+
+function populateIncompleteTasks() {
+  if (tasks.incompleteCount === 0) {
+    console.log("rendering empty message for incomplete tasks list");
+    incompleteEmptyMessage.style.display = "block";
+    incompleteTasksList.style.display = "none";
+  } else {
+    console.log("rendering incomplete tasks list");
+    incompleteTasksList.style.display = "block";
+    incompleteEmptyMessage.style.display = "none";
+
+    let htmlString = "";
+    tasks.incomplete.forEach((task) => {
+      htmlString += `
+      <li class="list-item">
+        <div class="task">
+          <input type="radio" name="" id="" />
+          <div class="task-data">
+            <h3 class="task-description">${task.description}</h3>
+            <div class="task-metadata">
+              <span class="category">${task.category}</span>
+              <span>Due on ${task.dueDate}</span>
+            </div>
+          </div>
+        </div>
+      </li>
+      `;
+    });
+
+    incompleteTasksList.innerHTML = htmlString;
+  }
+}
+
+function renderUI() {
   populateTaskCounters();
+  populateIncompleteTasks();
 }
 
 (() => {
-  populateTaskCounters();
+  renderUI();
 })();

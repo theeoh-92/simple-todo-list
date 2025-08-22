@@ -4,60 +4,57 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Simple Todo List</title>
-    <!-- pico css -->
+    <!-- Pico CSS -->
     <link
       rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.classless.blue.min.css"
+      href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.classless.min.css"
     />
-    <!-- custom css -->
+    <!-- custom CSS -->
     <link rel="stylesheet" href="./assets/css/styles.css" />
-    <!-- custom js... modules are auto deferred -->
-    <script type="module" src="./assets/js/app.js"></script>
   </head>
   <body>
     <header>
       <h1>📋 Simple Todo List</h1>
     </header>
 
-    <main>
-      <section class="task-list">
-        <header class="task-list__header">
-          <h2 class="tl__header-title">💤 Incomplete Tasks</h2>
-          <span id="incomplete-tasks-count" class="badge"></span>
+    <main class="lists">
+      <!-- incomplete tasks -->
+      <section>
+        <header>
+          <h2>💤 Incomplete Tasks</h2>
+          <span class="badge" id="incomplete-count"></span>
         </header>
 
-        <!-- <ul class="task-list__body"></ul> -->
-
-        <p class="task-list__empty">
-          <em>Nothing here... why not add a task?</em>
+        <p id="incomplete-empty">
+          <em>Nothing here... create a task to get started.</em>
         </p>
+
+        <ul class="list" id="incomplete-tasks">
+          <!-- <li class="list-item">
+            <div class="task">
+              <input type="radio" name="" id="" />
+              <div class="task-data">
+                <h3>Take out trash</h3>
+                <div class="task-metadata">
+                  <span>Home</span>
+                  <span>Due on 2025/08/22</span>
+                </div>
+              </div>
+            </div>
+          </li> -->
+        </ul>
       </section>
 
-      <section class="task-list">
-        <header class="task-list__header">
-          <h2 class="tl__header-title">🔥 Completed Tasks</h2>
-          <span id="complete-tasks-count" class="badge"></span>
-        </header>
-
-        <!-- <ul class="task-list__body"></ul> -->
-
-        <p class="task-list__empty">
-          <em>No wins yet — finish a task to celebrate here!</em>
-        </p>
-      </section>
+      <!-- TODO: completed tasks -->
     </main>
 
     <footer>
-      <p>Simple Todo List © 2025</p>
-      <small>Built by Theo Snyman</small>
+      <p>Simple Todo List &copy; 2025</p>
+      <small>Developed by Theo Snyman</small>
     </footer>
 
-    <button id="task-creator__open" data-role="open-task-creator">
-      <ion-icon name="add-outline" data-role="open-task-creator"></ion-icon>
-    </button>
-
-    <!-- task creator modal -->
-    <dialog class="modal" id="task-creator">
+    <!-- task creator -->
+    <dialog id="task-creator">
       <article>
         <header>
           <button
@@ -71,46 +68,37 @@
         </header>
 
         <form>
-          <!-- task description -->
-          <label for="task-description">Description</label>
-          <input
-            type="text"
-            name="task-description"
-            id="task-description"
-            autocomplete="off"
-            aria-describedby="task-description-helper"
-          />
-          <small id="task-description-helper">Please describe your task.</small>
-          <!-- metadata -->
-          <fieldset class="task-metadata">
-            <!-- task category -->
-            <div>
-              <select
-                name="task-category-select"
-                id="task-category-select"
-                aria-label="Categorize your task..."
-              >
-                <option selected disabled value="">
-                  Categorize your task...
-                </option>
-                <option value="Work">Work</option>
-                <option value="Personal">Personal</option>
-                <option value="Health">Health</option>
-                <option value="Home">Home</option>
-                <option value="Learning">Learning</option>
-              </select>
-            </div>
-            <!-- task due date -->
-            <div>
-              <label for="task-due-date">Due Date</label>
-              <input
-                type="date"
-                name="task-due-date"
-                id="task-due-date"
-                aria-label="Date"
-              />
-            </div>
-          </fieldset>
+          <label>
+            Description
+            <input
+              name="task-description"
+              id="task-description"
+              autocomplete="off"
+              aria-describedby="task-description-helper"
+              required
+            />
+            <small id="task-description-helper"
+              >Please describe your task.</small
+            >
+          </label>
+
+          <select
+            name="task-category"
+            aria-label="Categorize your task..."
+            id="task-category"
+          >
+            <option value="" selected disabled>Categorize your task...</option>
+            <option value="Work">Work</option>
+            <option value="Home">Home</option>
+            <option value="Personal">Personal</option>
+            <option value="Learning">Learning</option>
+            <option value="Other">Other</option>
+          </select>
+
+          <label>
+            Due Date
+            <input type="date" name="task-due-date" id="task-due-date" />
+          </label>
         </form>
 
         <footer>
@@ -118,6 +106,11 @@
         </footer>
       </article>
     </dialog>
+
+    <!-- open task creator -->
+    <button id="open-task-creator" data-role="open-task-creator">
+      <ion-icon name="add-outline" data-role="open-task-creator"></ion-icon>
+    </button>
 
     <!-- ionicons -->
     <script
@@ -128,5 +121,7 @@
       nomodule
       src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"
     ></script>
+    <!-- custom JS -->
+    <script src="./assets/js/app.js" type="module"></script>
   </body>
 </html>
