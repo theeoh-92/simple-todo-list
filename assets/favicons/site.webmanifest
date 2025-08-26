@@ -1,0 +1,21 @@
+{
+  "name": "Simple Todo List",
+  "short_name": "Simple Todo",
+  "description": "A simple todo list application.",
+  "icons": [
+    {
+      "src": "/android-chrome-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/android-chrome-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "theme_color": "#2060DF",
+  "background_color": "#13171F",
+  "display": "standalone",
+  "orientation": "portrait"
+}
