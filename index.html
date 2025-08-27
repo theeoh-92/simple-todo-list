@@ -29,6 +29,54 @@
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.fluid.classless.blue.min.css"
     />
+    <!-- custom css -->
+    <link rel="stylesheet" href="./assets/css/styles.css" />
   </head>
-  <body></body>
+  <body>
+    <header>
+      <h1>📋 Simple Todo List</h1>
+    </header>
+
+    <main>
+      <!-- incomplete tasks section -->
+      <section class="incomplete-section">
+        <header>
+          <h2>💤 Incomplete Tasks</h2>
+        </header>
+
+        <!-- incomplete task list -->
+        <ul class="list">
+          <!-- tasks -->
+          <li class="list-item">
+            <div class="task">
+              <input type="checkbox" name="" class="task-checkbox" id="" />
+              <div>
+                <p class="task-description">Take out trash</p>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </section>
+    </main>
+
+    <footer>
+      <div class="footer-content">
+        <p>Simple Todo List &copy; 2025</p>
+        <small>Built by Theo Snyman</small>
+      </div>
+      <button class="add-task-button">
+        <ion-icon name="add-outline"></ion-icon>
+      </button>
+    </footer>
+
+    <!-- ionicons -->
+    <script
+      type="module"
+      src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"
+    ></script>
+    <script
+      nomodule
+      src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"
+    ></script>
+  </body>
 </html>

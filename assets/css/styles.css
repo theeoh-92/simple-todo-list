@@ -1,0 +1,74 @@
+/* sticky header/footer layout with full viewport height */
+body {
+  display: flex;
+  flex-direction: column;
+  height: 100dvh;
+  max-height: 100dvh;
+}
+
+/* main fills all space between header/footer */
+main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden; /* prevent body from overflowing */
+}
+
+/* section fills entire main */
+.incomplete-section {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  margin: 0;
+}
+
+/* list fills most section space and scrolls */
+.list {
+  flex: 1;
+  overflow-y: auto;
+  min-height: 0;
+  padding: 0;
+  margin: 0;
+}
+
+.list-item {
+  list-style: none;
+  margin-bottom: 0.5rem;
+}
+
+.list-item:last-of-type {
+  margin-bottom: 0;
+}
+
+.task {
+  background: #22262e;
+  padding: 1rem;
+  border-radius: 5px; /* matches pico css button radiuses */
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.task-checkbox,
+.task-description {
+  margin: 0;
+}
+
+footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.footer-content > p {
+  margin-bottom: 0.25rem;
+}
+
+.add-task-button {
+  font-size: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.75rem;
+}
