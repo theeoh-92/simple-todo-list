@@ -45,13 +45,19 @@
         </header>
 
         <!-- incomplete task list -->
-        <ul class="list">
+        <ul class="list" id="incomplete-list">
           <!-- tasks -->
           <li class="list-item">
             <div class="task">
               <input type="checkbox" name="" class="task-checkbox" id="" />
-              <div>
+              <div class="task-details">
                 <p class="task-description">Take out trash</p>
+                <button class="delete-task-button" data-role="delete-task">
+                  <ion-icon
+                    name="trash-outline"
+                    data-role="delete-task"
+                  ></ion-icon>
+                </button>
               </div>
             </div>
           </li>
@@ -64,10 +70,40 @@
         <p>Simple Todo List &copy; 2025</p>
         <small>Built by Theo Snyman</small>
       </div>
-      <button class="add-task-button">
-        <ion-icon name="add-outline"></ion-icon>
-      </button>
     </footer>
+
+    <button class="add-task-button" date-role="open-task-creator">
+      <ion-icon name="add-outline" data-role="open-task-creator"></ion-icon>
+    </button>
+
+    <dialog id="task-creator">
+      <article>
+        <header>
+          <button rel="prev" data-role="close-task-creator"></button>
+          <p>
+            <strong>🎯 Create a task</strong>
+          </p>
+        </header>
+
+        <form>
+          <label>
+            Description
+            <input
+              type="text"
+              name="task-description"
+              id="task-description"
+              aria-describedby="description-helper"
+              autocomplete="off"
+            />
+            <small id="description-helper">Describe your task</small>
+          </label>
+        </form>
+
+        <footer>
+          <button data-role="create-task">Create</button>
+        </footer>
+      </article>
+    </dialog>
 
     <!-- ionicons -->
     <script
@@ -78,5 +114,7 @@
       nomodule
       src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"
     ></script>
+    <!-- custom js -->
+    <script type="module" src="./assets/js/app.js"></script>
   </body>
 </html>
