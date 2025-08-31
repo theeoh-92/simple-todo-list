@@ -55,11 +55,60 @@ main {
   margin: 0;
 }
 
-.task-details {
+.task-content {
   flex: 1;
   display: flex;
   align-items: center;
   justify-content: space-between;
+}
+
+.task-details {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.badge {
+  padding: 0.125rem 0.25rem;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+.badge-sage {
+  background-color: #e8f5e9;
+  color: #2e5931;
+}
+.badge-lavender {
+  background-color: #f3e5f5;
+  color: #5b2e5e;
+}
+.badge-sky {
+  background-color: #e3f2fd;
+  color: #1a4971;
+}
+.badge-peach {
+  background-color: #fbe9e7;
+  color: #773622;
+}
+.badge-sand {
+  background-color: #fafafa;
+  color: #4a4845;
+}
+.badge-mint {
+  background-color: #e0f2f1;
+  color: #2d5753;
+}
+.badge-amber {
+  background-color: #fff3e0;
+  color: #875400;
+}
+.badge-rose {
+  background-color: #fde8ef;
+  color: #833b4f;
+}
+
+.task-due {
+  color: #9ca3af;
 }
 
 .delete-task-button {

@@ -8,6 +8,8 @@ const body = document.querySelector("body");
 const taskCreator = document.getElementById("task-creator");
 const taskDescriptionInput = document.getElementById("task-description");
 const incompleteList = document.getElementById("incomplete-list");
+const taskCategoryInput = document.getElementById("task-category");
+const taskDueDateInput = document.getElementById("task-due-date");
 
 body.addEventListener("click", (clickEvent) => {
   if (clickEvent.target.dataset.role === "open-task-creator") {
@@ -52,6 +54,8 @@ function createTask() {
     const newTask = {
       id: `T-${tasks.nextId++}`, // use current ID then increment
       description: taskDescriptionInput.value,
+      category: taskCategoryInput.value || null,
+      dueDate: taskDueDateInput.value || null,
       completed: false,
       createdOn: new Date(),
       completedOn: null,
@@ -59,19 +63,7 @@ function createTask() {
 
     tasks.incomplete.push(newTask);
 
-    incompleteList.innerHTML += `
-      <li class="list-item" data-task-id="${newTask.id}">
-        <div class="task">
-          <input type="checkbox" class="task-checkbox" data-task-id="${newTask.id}" />
-          <div class="task-details">
-            <p class="task-description">${newTask.description}</p>
-            <button class="delete-task-button" data-role="delete-task">
-              <ion-icon name="trash-outline" data-role="delete-task"></ion-icon>
-            </button>
-          </div>
-        </div>
-      </li>
-    `;
+    incompleteList.innerHTML += createTaskHTML(newTask);
 
     console.log("task validated and created successfully:", newTask);
     closeTaskCreator();
@@ -141,4 +133,60 @@ function removeValidationState() {
 
 function clearInputs() {
   taskDescriptionInput.value = "";
+  taskCategoryInput.value = "";
+  taskDueDateInput.value = "";
+}
+
+function createTaskHTML(task) {
+  const categoryHTML = task.category
+    ? `<span class="badge badge-${getCategoryBadgeColor(task.category)}">${
+        task.category
+      }</span>`
+    : "";
+
+  const dueDateHTML = task.dueDate
+    ? `<small class="task-due">Due ${task.dueDate}</small>`
+    : "";
+
+  const taskDetailsDiv = dueDateHTML
+    ? `<div>
+         <div class="task-details">
+           <p class="task-description">${task.description}</p>
+           ${categoryHTML}
+         </div>
+         ${dueDateHTML}
+       </div>`
+    : `<div class="task-details">
+         <p class="task-description">${task.description}</p>
+         ${categoryHTML}
+       </div>`;
+
+  return `
+    <li class="list-item" data-task-id="${task.id}">
+      <div class="task">
+        <input type="checkbox" class="task-checkbox" data-task-id="${task.id}" />
+        <div class="task-content">
+          ${taskDetailsDiv}
+          <button class="delete-task-button" data-role="delete-task">
+            <ion-icon name="trash-outline" data-role="delete-task"></ion-icon>
+          </button>
+        </div>
+      </div>
+    </li>
+  `;
+}
+
+function getCategoryBadgeColor(category) {
+  const colorMap = {
+    Home: "lavender",
+    Personal: "rose",
+    Life: "mint",
+    Social: "peach",
+    Professional: "sky",
+    Hobby: "sand",
+    Errand: "amber",
+    Planning: "sage",
+  };
+
+  return colorMap[category] || "sand"; // default to sand if category 404
 }
