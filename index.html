@@ -50,8 +50,14 @@
           <li class="list-item">
             <div class="task">
               <input type="checkbox" name="" class="task-checkbox" id="" />
-              <div class="task-details">
-                <p class="task-description">Take out trash</p>
+              <div class="task-content">
+                <div>
+                  <div class="task-details">
+                    <p class="task-description">Take out trash</p>
+                    <span class="badge badge-lavender">Home</span>
+                  </div>
+                  <small class="task-due">Due 2025/08/31</small>
+                </div>
                 <button class="delete-task-button" data-role="delete-task">
                   <ion-icon
                     name="trash-outline"
@@ -94,8 +100,26 @@
               id="task-description"
               aria-describedby="description-helper"
               autocomplete="off"
+              required
             />
             <small id="description-helper">Describe your task</small>
+          </label>
+
+          <select name="task-category" id="task-category">
+            <option selected disabled value="">Categorize your task</option>
+            <option value="Home">Home</option>
+            <option value="Personal">Personal</option>
+            <option value="Life">Life</option>
+            <option value="Social">Social</option>
+            <option value="Professional">Professional</option>
+            <option value="Hobby">Hobby</option>
+            <option value="Errand">Errand</option>
+            <option value="Planning">Planning</option>
+          </select>
+
+          <label>
+            Due Date
+            <input type="date" name="task-due-date" id="task-due-date" />
           </label>
         </form>
 

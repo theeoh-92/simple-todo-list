@@ -8,6 +8,11 @@ const body = document.querySelector("body");
 const taskCreator = document.getElementById("task-creator");
 const taskDescriptionInput = document.getElementById("task-description");
 const incompleteList = document.getElementById("incomplete-list");
+const taskCategoryInput = document.getElementById("task-category");
+const taskDueDateInput = document.getElementById("task-due-date");
+
+loadTasksFromStorage();
+renderTasks();
 
 body.addEventListener("click", (clickEvent) => {
   if (clickEvent.target.dataset.role === "open-task-creator") {
@@ -52,26 +57,16 @@ function createTask() {
     const newTask = {
       id: `T-${tasks.nextId++}`, // use current ID then increment
       description: taskDescriptionInput.value,
+      category: taskCategoryInput.value || null,
+      dueDate: taskDueDateInput.value || null,
       completed: false,
       createdOn: new Date(),
       completedOn: null,
     };
 
     tasks.incomplete.push(newTask);
-
-    incompleteList.innerHTML += `
-      <li class="list-item" data-task-id="${newTask.id}">
-        <div class="task">
-          <input type="checkbox" class="task-checkbox" data-task-id="${newTask.id}" />
-          <div class="task-details">
-            <p class="task-description">${newTask.description}</p>
-            <button class="delete-task-button" data-role="delete-task">
-              <ion-icon name="trash-outline" data-role="delete-task"></ion-icon>
-            </button>
-          </div>
-        </div>
-      </li>
-    `;
+    saveTasksToStorage();
+    renderTasks();
 
     console.log("task validated and created successfully:", newTask);
     closeTaskCreator();
@@ -82,7 +77,6 @@ function createTask() {
 
 function handleTaskCompletion(checkbox) {
   const taskId = checkbox.dataset.taskId;
-  const taskElement = checkbox.closest(".list-item");
 
   // find task in app data
   const taskIndex = tasks.incomplete.findIndex((task) => task.id === taskId);
@@ -93,11 +87,11 @@ function handleTaskCompletion(checkbox) {
     completedTask.completed = true;
     completedTask.completedOn = new Date();
 
-    // move from incomplete to complete
+    // remove from incomplete and push to complete
     tasks.incomplete.splice(taskIndex, 1);
     tasks.completed.push(completedTask);
-
-    taskElement.remove(); // remove task from DOM
+    saveTasksToStorage();
+    renderTasks();
 
     console.log("task completed:", completedTask);
   }
@@ -105,14 +99,14 @@ function handleTaskCompletion(checkbox) {
 
 function handleTaskDeletion(deleteButton) {
   const taskId = deleteButton.closest(".list-item").dataset.taskId;
-  const taskElement = deleteButton.closest(".list-item");
 
   // find task in app data
   const taskIndex = tasks.incomplete.findIndex((task) => task.id === taskId);
 
   if (taskIndex !== -1) {
     const deletedTask = tasks.incomplete.splice(taskIndex, 1)[0];
-    taskElement.remove();
+    saveTasksToStorage();
+    renderTasks();
 
     console.log("task deleted:", deletedTask);
   }
@@ -141,4 +135,84 @@ function removeValidationState() {
 
 function clearInputs() {
   taskDescriptionInput.value = "";
+  taskCategoryInput.value = "";
+  taskDueDateInput.value = "";
+}
+
+function createTaskHTML(task) {
+  const categoryHTML = task.category
+    ? `<span class="badge badge-${getCategoryBadgeColor(task.category)}">${
+        task.category
+      }</span>`
+    : "";
+
+  const dueDateHTML = task.dueDate
+    ? `<small class="task-due">Due ${task.dueDate}</small>`
+    : "";
+
+  const taskDetailsDiv = dueDateHTML
+    ? `<div>
+         <div class="task-details">
+           <p class="task-description">${task.description}</p>
+           ${categoryHTML}
+         </div>
+         ${dueDateHTML}
+       </div>`
+    : `<div class="task-details">
+         <p class="task-description">${task.description}</p>
+         ${categoryHTML}
+       </div>`;
+
+  return `
+    <li class="list-item" data-task-id="${task.id}">
+      <div class="task">
+        <input type="checkbox" class="task-checkbox" data-task-id="${task.id}" />
+        <div class="task-content">
+          ${taskDetailsDiv}
+          <button class="delete-task-button" data-role="delete-task">
+            <ion-icon name="trash-outline" data-role="delete-task"></ion-icon>
+          </button>
+        </div>
+      </div>
+    </li>
+  `;
+}
+
+function getCategoryBadgeColor(category) {
+  const colorMap = {
+    Home: "lavender",
+    Personal: "rose",
+    Life: "mint",
+    Social: "peach",
+    Professional: "sky",
+    Hobby: "sand",
+    Errand: "amber",
+    Planning: "sage",
+  };
+
+  return colorMap[category] || "sand"; // default to sand if category 404
+}
+
+function saveTasksToStorage() {
+  localStorage.setItem("tasks", JSON.stringify(tasks));
+  console.log("tasks saved to storage");
+}
+
+function loadTasksFromStorage() {
+  const storedTasks = localStorage.getItem("tasks");
+  if (storedTasks) {
+    const parsedTasks = JSON.parse(storedTasks);
+    tasks.incomplete = parsedTasks.incomplete;
+    tasks.completed = parsedTasks.completed;
+    tasks.nextId = parsedTasks.nextId;
+    console.log("tasks loaded from storage");
+  }
+}
+
+function renderTasks() {
+  incompleteList.innerHTML = tasks.incomplete
+    .map((task) => createTaskHTML(task))
+    .join("");
+
+  console.log("tasks rendered");
 }
