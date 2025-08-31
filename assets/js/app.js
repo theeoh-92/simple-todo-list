@@ -11,6 +11,9 @@ const incompleteList = document.getElementById("incomplete-list");
 const taskCategoryInput = document.getElementById("task-category");
 const taskDueDateInput = document.getElementById("task-due-date");
 
+loadTasksFromStorage();
+renderTasks();
+
 body.addEventListener("click", (clickEvent) => {
   if (clickEvent.target.dataset.role === "open-task-creator") {
     openTaskCreator();
@@ -62,8 +65,8 @@ function createTask() {
     };
 
     tasks.incomplete.push(newTask);
-
-    incompleteList.innerHTML += createTaskHTML(newTask);
+    saveTasksToStorage();
+    renderTasks();
 
     console.log("task validated and created successfully:", newTask);
     closeTaskCreator();
@@ -74,7 +77,6 @@ function createTask() {
 
 function handleTaskCompletion(checkbox) {
   const taskId = checkbox.dataset.taskId;
-  const taskElement = checkbox.closest(".list-item");
 
   // find task in app data
   const taskIndex = tasks.incomplete.findIndex((task) => task.id === taskId);
@@ -85,11 +87,11 @@ function handleTaskCompletion(checkbox) {
     completedTask.completed = true;
     completedTask.completedOn = new Date();
 
-    // move from incomplete to complete
+    // remove from incomplete and push to complete
     tasks.incomplete.splice(taskIndex, 1);
     tasks.completed.push(completedTask);
-
-    taskElement.remove(); // remove task from DOM
+    saveTasksToStorage();
+    renderTasks();
 
     console.log("task completed:", completedTask);
   }
@@ -97,14 +99,14 @@ function handleTaskCompletion(checkbox) {
 
 function handleTaskDeletion(deleteButton) {
   const taskId = deleteButton.closest(".list-item").dataset.taskId;
-  const taskElement = deleteButton.closest(".list-item");
 
   // find task in app data
   const taskIndex = tasks.incomplete.findIndex((task) => task.id === taskId);
 
   if (taskIndex !== -1) {
     const deletedTask = tasks.incomplete.splice(taskIndex, 1)[0];
-    taskElement.remove();
+    saveTasksToStorage();
+    renderTasks();
 
     console.log("task deleted:", deletedTask);
   }
@@ -189,4 +191,28 @@ function getCategoryBadgeColor(category) {
   };
 
   return colorMap[category] || "sand"; // default to sand if category 404
+}
+
+function saveTasksToStorage() {
+  localStorage.setItem("tasks", JSON.stringify(tasks));
+  console.log("tasks saved to storage");
+}
+
+function loadTasksFromStorage() {
+  const storedTasks = localStorage.getItem("tasks");
+  if (storedTasks) {
+    const parsedTasks = JSON.parse(storedTasks);
+    tasks.incomplete = parsedTasks.incomplete;
+    tasks.completed = parsedTasks.completed;
+    tasks.nextId = parsedTasks.nextId;
+    console.log("tasks loaded from storage");
+  }
+}
+
+function renderTasks() {
+  incompleteList.innerHTML = tasks.incomplete
+    .map((task) => createTaskHTML(task))
+    .join("");
+
+  console.log("tasks rendered");
 }
