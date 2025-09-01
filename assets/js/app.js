@@ -1,7 +1,6 @@
 const tasks = {
   incomplete: [],
   completed: [],
-  nextId: 1,
 };
 
 const body = document.querySelector("body");
@@ -15,16 +14,28 @@ loadTasksFromStorage();
 renderTasks();
 
 body.addEventListener("click", (clickEvent) => {
-  if (clickEvent.target.dataset.role === "open-task-creator") {
+  const openButton = clickEvent.target.closest(
+    '[data-role="open-task-creator"]'
+  );
+  const closeButton = clickEvent.target.closest(
+    '[data-role="close-task-creator"]'
+  );
+  const createButton = clickEvent.target.closest('[data-role="create-task"]');
+  const completeButton = clickEvent.target.closest(
+    '[data-role="complete-task"]'
+  );
+  const deleteButton = clickEvent.target.closest('[data-role="delete-task"]');
+
+  if (openButton) {
     openTaskCreator();
-  } else if (clickEvent.target.dataset.role === "close-task-creator") {
+  } else if (closeButton) {
     closeTaskCreator();
-  } else if (clickEvent.target.dataset.role === "create-task") {
+  } else if (createButton) {
     createTask();
-  } else if (clickEvent.target.classList.contains("task-checkbox")) {
-    handleTaskCompletion(clickEvent.target);
-  } else if (clickEvent.target.dataset.role === "delete-task") {
-    handleTaskDeletion(clickEvent.target);
+  } else if (completeButton) {
+    handleTaskCompletion(completeButton);
+  } else if (deleteButton) {
+    handleTaskDeletion(deleteButton);
   }
 });
 
@@ -166,11 +177,16 @@ function createTaskHTML(task) {
   return `
     <li class="list-item" data-task-id="${task.id}">
       <div class="task">
-        <input type="checkbox" class="task-checkbox" data-task-id="${task.id}" />
+        <input
+          type="checkbox"
+          class="task-checkbox"
+          data-role="complete-task"
+          data-task-id="${task.id}"
+        />
         <div class="task-content">
           ${taskDetailsDiv}
           <button class="delete-task-button" data-role="delete-task">
-            <ion-icon name="trash-outline" data-role="delete-task"></ion-icon>
+            <ion-icon name="trash-outline"></ion-icon>
           </button>
         </div>
       </div>
@@ -204,7 +220,6 @@ function loadTasksFromStorage() {
     const parsedTasks = JSON.parse(storedTasks);
     tasks.incomplete = parsedTasks.incomplete;
     tasks.completed = parsedTasks.completed;
-    tasks.nextId = parsedTasks.nextId;
     console.log("tasks loaded from storage");
   }
 }
