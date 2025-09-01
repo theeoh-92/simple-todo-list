@@ -55,7 +55,7 @@ function createTask() {
 
   if (isValid) {
     const newTask = {
-      id: `T-${tasks.nextId++}`, // use current ID then increment
+      id: crypto.randomUUID(),
       description: taskDescriptionInput.value,
       category: taskCategoryInput.value || null,
       dueDate: taskDueDateInput.value || null,
