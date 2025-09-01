@@ -9,6 +9,7 @@ const taskDescriptionInput = document.getElementById("task-description");
 const incompleteList = document.getElementById("incomplete-list");
 const taskCategoryInput = document.getElementById("task-category");
 const taskDueDateInput = document.getElementById("task-due-date");
+const taskForm = document.getElementById("task-form");
 
 loadTasksFromStorage();
 renderTasks();
@@ -37,6 +38,12 @@ body.addEventListener("click", (clickEvent) => {
   } else if (deleteButton) {
     handleTaskDeletion(deleteButton);
   }
+});
+
+// allows user to press enter on KB devices
+taskForm.addEventListener("submit", (submitEvent) => {
+  submitEvent.preventDefault();
+  createTask();
 });
 
 taskDescriptionInput.addEventListener("input", () => {
