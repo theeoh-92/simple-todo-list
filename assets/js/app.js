@@ -232,15 +232,28 @@ function loadTasksFromStorage() {
 }
 
 function renderTasks() {
-  incompleteList.innerHTML = tasks.incomplete
-    .map((task) => createTaskHTML(task))
-    .join("");
-
-  console.log("tasks rendered");
+  if (tasks.incomplete.length === 0) {
+    incompleteList.innerHTML = createEmptyStateHTML();
+    console.log("empty state rendered");
+  } else {
+    incompleteList.innerHTML = tasks.incomplete
+      .map((task) => createTaskHTML(task))
+      .join("");
+    console.log("tasks rendered");
+  }
 }
 
 function sanitizeInput(input) {
   const tempDiv = document.createElement("div");
   tempDiv.textContent = input; // set text content to escape HTML
   return tempDiv.innerHTML;
+}
+
+function createEmptyStateHTML() {
+  return `
+    <figure class="empty-state">
+      <p>No tasks yet!</p>
+      <figcaption>Click the <mark>+</mark> button to create a task</figcaption>
+    </figure>
+  `;
 }
