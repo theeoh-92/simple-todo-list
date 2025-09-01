@@ -74,7 +74,7 @@ function createTask() {
   if (isValid) {
     const newTask = {
       id: crypto.randomUUID(),
-      description: taskDescriptionInput.value,
+      description: sanitizeInput(taskDescriptionInput.value.trim()),
       category: taskCategoryInput.value || null,
       dueDate: taskDueDateInput.value || null,
       completed: false,
@@ -136,7 +136,7 @@ function handleTaskDeletion(deleteButton) {
 
 function validateTask() {
   const taskDescription = taskDescriptionInput.value.trim();
-  return taskDescription.length > 0;
+  return taskDescription.length > 0 && taskDescription.length <= 40;
 }
 
 function updateValidationState(isValid) {
@@ -159,25 +159,25 @@ function clearInputs() {
 
 function createTaskHTML(task) {
   const categoryHTML = task.category
-    ? `<span class="badge badge-${getCategoryBadgeColor(task.category)}">${
+    ? `<span class="badge badge-${getCategoryBadgeColor(
         task.category
-      }</span>`
+      )}">${sanitizeInput(task.category)}</span>`
     : "";
 
   const dueDateHTML = task.dueDate
-    ? `<small class="task-due">Due ${task.dueDate}</small>`
+    ? `<small class="task-due">Due ${sanitizeInput(task.dueDate)}</small>`
     : "";
 
   const taskDetailsDiv = dueDateHTML
     ? `<div>
          <div class="task-details">
-           <p class="task-description">${task.description}</p>
+           <p class="task-description">${sanitizeInput(task.description)}</p>
            ${categoryHTML}
          </div>
          ${dueDateHTML}
        </div>`
     : `<div class="task-details">
-         <p class="task-description">${task.description}</p>
+         <p class="task-description">${sanitizeInput(task.description)}</p>
          ${categoryHTML}
        </div>`;
 
@@ -237,4 +237,10 @@ function renderTasks() {
     .join("");
 
   console.log("tasks rendered");
+}
+
+function sanitizeInput(input) {
+  const tempDiv = document.createElement("div");
+  tempDiv.textContent = input; // set text content to escape HTML
+  return tempDiv.innerHTML;
 }
