@@ -45,29 +45,7 @@
         </header>
 
         <!-- incomplete task list -->
-        <ul class="list" id="incomplete-list">
-          <!-- tasks -->
-          <li class="list-item">
-            <div class="task">
-              <input type="checkbox" name="" class="task-checkbox" id="" />
-              <div class="task-content">
-                <div>
-                  <div class="task-details">
-                    <p class="task-description">Take out trash</p>
-                    <span class="badge badge-lavender">Home</span>
-                  </div>
-                  <small class="task-due">Due 2025/08/31</small>
-                </div>
-                <button class="delete-task-button" data-role="delete-task">
-                  <ion-icon
-                    name="trash-outline"
-                    data-role="delete-task"
-                  ></ion-icon>
-                </button>
-              </div>
-            </div>
-          </li>
-        </ul>
+        <ul class="list" id="incomplete-list"></ul>
       </section>
     </main>
 
@@ -78,8 +56,8 @@
       </div>
     </footer>
 
-    <button class="add-task-button" date-role="open-task-creator">
-      <ion-icon name="add-outline" data-role="open-task-creator"></ion-icon>
+    <button class="add-task-button" data-role="open-task-creator">
+      <ion-icon name="add-outline"></ion-icon>
     </button>
 
     <dialog id="task-creator">
@@ -91,7 +69,7 @@
           </p>
         </header>
 
-        <form>
+        <form id="task-form">
           <label>
             Description
             <input

@@ -1,7 +1,6 @@
 const tasks = {
   incomplete: [],
   completed: [],
-  nextId: 1,
 };
 
 const body = document.querySelector("body");
@@ -10,22 +9,41 @@ const taskDescriptionInput = document.getElementById("task-description");
 const incompleteList = document.getElementById("incomplete-list");
 const taskCategoryInput = document.getElementById("task-category");
 const taskDueDateInput = document.getElementById("task-due-date");
+const taskForm = document.getElementById("task-form");
 
 loadTasksFromStorage();
 renderTasks();
 
 body.addEventListener("click", (clickEvent) => {
-  if (clickEvent.target.dataset.role === "open-task-creator") {
+  const openButton = clickEvent.target.closest(
+    '[data-role="open-task-creator"]'
+  );
+  const closeButton = clickEvent.target.closest(
+    '[data-role="close-task-creator"]'
+  );
+  const createButton = clickEvent.target.closest('[data-role="create-task"]');
+  const completeButton = clickEvent.target.closest(
+    '[data-role="complete-task"]'
+  );
+  const deleteButton = clickEvent.target.closest('[data-role="delete-task"]');
+
+  if (openButton) {
     openTaskCreator();
-  } else if (clickEvent.target.dataset.role === "close-task-creator") {
+  } else if (closeButton) {
     closeTaskCreator();
-  } else if (clickEvent.target.dataset.role === "create-task") {
+  } else if (createButton) {
     createTask();
-  } else if (clickEvent.target.classList.contains("task-checkbox")) {
-    handleTaskCompletion(clickEvent.target);
-  } else if (clickEvent.target.dataset.role === "delete-task") {
-    handleTaskDeletion(clickEvent.target);
+  } else if (completeButton) {
+    handleTaskCompletion(completeButton);
+  } else if (deleteButton) {
+    handleTaskDeletion(deleteButton);
   }
+});
+
+// allows user to press enter on KB devices
+taskForm.addEventListener("submit", (submitEvent) => {
+  submitEvent.preventDefault();
+  createTask();
 });
 
 taskDescriptionInput.addEventListener("input", () => {
@@ -55,8 +73,8 @@ function createTask() {
 
   if (isValid) {
     const newTask = {
-      id: `T-${tasks.nextId++}`, // use current ID then increment
-      description: taskDescriptionInput.value,
+      id: crypto.randomUUID(),
+      description: sanitizeInput(taskDescriptionInput.value.trim()),
       category: taskCategoryInput.value || null,
       dueDate: taskDueDateInput.value || null,
       completed: false,
@@ -118,7 +136,7 @@ function handleTaskDeletion(deleteButton) {
 
 function validateTask() {
   const taskDescription = taskDescriptionInput.value.trim();
-  return taskDescription.length > 0;
+  return taskDescription.length > 0 && taskDescription.length <= 40;
 }
 
 function updateValidationState(isValid) {
@@ -141,36 +159,41 @@ function clearInputs() {
 
 function createTaskHTML(task) {
   const categoryHTML = task.category
-    ? `<span class="badge badge-${getCategoryBadgeColor(task.category)}">${
+    ? `<span class="badge badge-${getCategoryBadgeColor(
         task.category
-      }</span>`
+      )}">${sanitizeInput(task.category)}</span>`
     : "";
 
   const dueDateHTML = task.dueDate
-    ? `<small class="task-due">Due ${task.dueDate}</small>`
+    ? `<small class="task-due">Due ${sanitizeInput(task.dueDate)}</small>`
     : "";
 
   const taskDetailsDiv = dueDateHTML
     ? `<div>
          <div class="task-details">
-           <p class="task-description">${task.description}</p>
+           <p class="task-description">${sanitizeInput(task.description)}</p>
            ${categoryHTML}
          </div>
          ${dueDateHTML}
        </div>`
     : `<div class="task-details">
-         <p class="task-description">${task.description}</p>
+         <p class="task-description">${sanitizeInput(task.description)}</p>
          ${categoryHTML}
        </div>`;
 
   return `
     <li class="list-item" data-task-id="${task.id}">
       <div class="task">
-        <input type="checkbox" class="task-checkbox" data-task-id="${task.id}" />
+        <input
+          type="checkbox"
+          class="task-checkbox"
+          data-role="complete-task"
+          data-task-id="${task.id}"
+        />
         <div class="task-content">
           ${taskDetailsDiv}
           <button class="delete-task-button" data-role="delete-task">
-            <ion-icon name="trash-outline" data-role="delete-task"></ion-icon>
+            <ion-icon name="trash-outline"></ion-icon>
           </button>
         </div>
       </div>
@@ -204,15 +227,33 @@ function loadTasksFromStorage() {
     const parsedTasks = JSON.parse(storedTasks);
     tasks.incomplete = parsedTasks.incomplete;
     tasks.completed = parsedTasks.completed;
-    tasks.nextId = parsedTasks.nextId;
     console.log("tasks loaded from storage");
   }
 }
 
 function renderTasks() {
-  incompleteList.innerHTML = tasks.incomplete
-    .map((task) => createTaskHTML(task))
-    .join("");
+  if (tasks.incomplete.length === 0) {
+    incompleteList.innerHTML = createEmptyStateHTML();
+    console.log("empty state rendered");
+  } else {
+    incompleteList.innerHTML = tasks.incomplete
+      .map((task) => createTaskHTML(task))
+      .join("");
+    console.log("tasks rendered");
+  }
+}
 
-  console.log("tasks rendered");
+function sanitizeInput(input) {
+  const tempDiv = document.createElement("div");
+  tempDiv.textContent = input; // set text content to escape HTML
+  return tempDiv.innerHTML;
+}
+
+function createEmptyStateHTML() {
+  return `
+    <figure class="empty-state">
+      <p>No tasks yet!</p>
+      <figcaption>Click the <mark>+</mark> button to create a task</figcaption>
+    </figure>
+  `;
 }
